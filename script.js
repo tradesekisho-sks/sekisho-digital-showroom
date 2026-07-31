@@ -67,54 +67,115 @@ image: "assets/images/showroom-craft.jpg",
 const valueTranslations = {
   category: {
     "Tea": {
-      ja: "お茶",
+      ja: "茶",
       en: "Tea",
       vi: "Trà"
     },
-    "Green Tea": {
-      ja: "緑茶",
-      en: "Green Tea",
-      vi: "Trà xanh"
+    "Dried Sweet Potato": {
+      ja: "干し芋",
+      en: "Dried Sweet Potato",
+      vi: "Khoai lang sấy"
     },
-    "Seasoning": {
-      ja: "調味料",
-      en: "Seasoning",
-      vi: "Gia vị"
-    },
-    "Frozen Food": {
-      ja: "冷凍食品",
-      en: "Frozen Food",
-      vi: "Thực phẩm đông lạnh"
-    },
-    "Sweets": {
-      ja: "菓子・スイーツ",
-      en: "Sweets",
+    "Confectionery": {
+      ja: "菓子",
+      en: "Confectionery",
       vi: "Bánh kẹo"
-    },
-    "Noodles": {
-      ja: "麺類",
-      en: "Noodles",
-      vi: "Mì"
     },
     "Beverage": {
       ja: "飲料",
       en: "Beverage",
       vi: "Đồ uống"
     },
-    "Tableware": {
-      ja: "食器",
-      en: "Tableware",
-      vi: "Đồ dùng bàn ăn"
+    "Alcohol": {
+      ja: "アルコール",
+      en: "Alcohol",
+      vi: "Đồ uống có cồn"
+    },
+    "Konjac": {
+      ja: "蒟蒻",
+      en: "Konjac",
+      vi: "Konjac"
+    },
+    "Rice": {
+      ja: "米",
+      en: "Rice",
+      vi: "Gạo"
+    },
+    "Seasoning": {
+      ja: "調味料",
+      en: "Seasoning",
+      vi: "Gia vị"
+    },
+    "Syrup": {
+      ja: "シロップ",
+      en: "Syrup",
+      vi: "Siro"
+    },
+    "Pickles": {
+      ja: "漬物",
+      en: "Pickles",
+      vi: "Đồ muối chua"
+    },
+    "Seafood": {
+      ja: "海産物",
+      en: "Seafood",
+      vi: "Hải sản"
+    },
+    "Fresh Meat": {
+      ja: "精肉",
+      en: "Fresh Meat",
+      vi: "Thịt tươi"
+    },
+    "Processed Food": {
+      ja: "加工食品",
+      en: "Processed Food",
+      vi: "Thực phẩm chế biến"
+    },
+    "Noodles": {
+      ja: "麺類",
+      en: "Noodles",
+      vi: "Mì"
+    },
+    "Fermented Soybeans": {
+      ja: "納豆",
+      en: "Fermented Soybeans",
+      vi: "Natto"
+    },
+
+    "Ceramics": {
+      ja: "陶磁器",
+      en: "Ceramics",
+      vi: "Đồ gốm sứ"
+    },
+    "Decoration": {
+      ja: "装飾品",
+      en: "Decoration",
+      vi: "Đồ trang trí"
+    },
+    "Glassware": {
+      ja: "ガラス製品",
+      en: "Glassware",
+      vi: "Sản phẩm thủy tinh"
+    },
+    "Lighting": {
+      ja: "照明",
+      en: "Lighting",
+      vi: "Đèn chiếu sáng"
     },
     "Textile": {
       ja: "繊維製品",
       en: "Textile",
       vi: "Sản phẩm dệt may"
     },
-    "Glassware": {
-      ja: "ガラス製品",
-      en: "Glassware",
-      vi: "Sản phẩm thủy tinh"
+    "Ozone Device": {
+      ja: "オゾン機器",
+      en: "Ozone Device",
+      vi: "Thiết bị ozone"
+    },
+    "Tableware": {
+      ja: "食器",
+      en: "Tableware",
+      vi: "Đồ dùng bàn ăn"
     },
     "Equipment": {
       ja: "設備",
