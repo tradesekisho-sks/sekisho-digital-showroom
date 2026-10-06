@@ -7,7 +7,7 @@
 @media(max-width:980px){.main-nav{display:none;position:absolute;top:84px;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);padding:20px 24px;flex-direction:column;gap:15px}.main-nav.show{display:flex}.menu-button{display:block;margin-left:auto}.header-tools{order:3}.showroom-grid,.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.company-grid{grid-template-columns:1fr;gap:45px}.showroom-card-side{border-left:0;border-top:1px solid var(--line);padding:28px 0 0}.modal-grid{grid-template-columns:1fr}.gallery-main{height:min(55vw,440px)}}
 @media(max-width:640px){.container{width:min(100% - 28px,var(--max))}.header-inner{height:68px;gap:10px}.brand img{width:38px;height:38px}.brand strong{font-size:17px}.brand span{font-size:9px}.main-nav{top:68px}.hero{padding:48px 0 42px}.hero h1{font-size:30px}.hero-text{font-size:13px;margin-bottom:25px}.catalog-search{grid-template-columns:1fr 92px;border:1px solid var(--ink)}.catalog-search select{grid-column:1/-1;border-right:0;border-bottom:1px solid var(--line);height:46px}.catalog-search input{height:50px;padding:0 13px}.catalog-search button{height:50px;font-size:12px}.search-subrow{align-items:flex-start;flex-wrap:wrap}.search-subrow .text-link{width:100%;margin-left:0}.section{padding:58px 0}.section-title.centered{margin-bottom:34px}.showroom-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 16px}.showroom-image{margin-bottom:13px}.showroom-body h3{font-size:14px}.showroom-body p{font-size:10px;line-height:1.55}.product-title-row{align-items:flex-start;flex-direction:column;margin-bottom:28px}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 12px}.product-image{height:43vw;max-height:210px}.product-body h3{font-size:13px}.product-body .en{font-size:10px}.tag{font-size:9px}.contact-card{grid-template-columns:1fr;gap:25px}.contact-info{padding:22px 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.25)}.modal{padding:0;align-items:stretch}.modal-card{max-height:100vh;width:100%;padding:20px 16px 40px}.modal-grid{gap:28px}.gallery-main{height:75vw;max-height:360px}.gallery-thumbs{grid-template-columns:repeat(3,1fr)}.gallery-thumb{height:70px}.spec-row{grid-template-columns:120px 1fr;font-size:12px}.modal-info h2{font-size:24px}.modal-actions>*{width:100%}}
 @media(max-width:380px){.brand-copy span{display:none}.product-grid{grid-template-columns:1fr}.product-image{height:78vw}.showroom-body p{display:none}}
-@media(max-width:380px){...}
+
 /* Sekisho logo size override */
 .header-inner .brand img {
   width: 90px !important;
@@ -22,10 +22,6 @@
     width: 65px !important;
     height: auto !important;
   }
-}
-/* Keep hero description on one line on desktop */
-.hero p {
-  max-width: 1100px;
 }
 /* Center hero contents precisely */
 .hero-inner {
@@ -51,4 +47,125 @@
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* ========================================
+   COMPANY PROFILE - NEW DESIGN
+   ======================================== */
+
+.company-section {
+  background: #BFCFBB;
+}
+
+/* Two-column company area */
+.company-grid {
+  gap: 70px;
+}
+
+/* Smaller company title */
+.company-card h2 {
+  font-size: clamp(28px, 2.6vw, 36px);
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+}
+
+/* Company description */
+.company-card > p:not(.eyebrow) {
+  color: #344C3D;
+  max-width: 760px;
+}
+
+/* Company website button */
+.company-card .outline-button {
+  background: rgba(255, 255, 255, 0.35);
+  border-color: #344C3D;
+}
+
+.company-card .outline-button:hover {
+  background: #344C3D;
+  color: #fff;
+}
+
+/* Right showroom column */
+.showroom-card-side {
+  border-left: 1px solid rgba(52, 76, 61, 0.25);
+  padding-left: 54px;
+}
+
+/* Each showroom row */
+.mini-showroom {
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(52, 76, 61, 0.20);
+}
+
+/* Number circles */
+.mini-showroom span {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #344C3D;
+  background: #edf1eb;
+}
+
+/* Different green for each circle */
+.mini-showroom:nth-child(2) span {
+  background: #edf1eb;
+}
+
+.mini-showroom:nth-child(3) span {
+  background: #8EA58C;
+  color: #fff;
+}
+
+.mini-showroom:nth-child(4) span {
+  background: #738A6E;
+  color: #fff;
+}
+
+.mini-showroom:nth-child(5) span {
+  background: #344C3D;
+  color: #fff;
+}
+
+/* Showroom names */
+.mini-showroom b {
+  font-size: 15px;
+  color: #27312d;
+}
+
+/* Hover */
+.mini-showroom {
+  transition: transform 0.2s ease;
+}
+
+.mini-showroom:hover {
+  transform: translateX(5px);
+}
+
+/* Mobile */
+@media (max-width: 980px) {
+  .showroom-card-side {
+    border-left: 0;
+    border-top: 1px solid rgba(52, 76, 61, 0.25);
+    padding: 32px 0 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .company-card h2 {
+    font-size: 27px;
+  }
+
+  .mini-showroom span {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+  }
 }
