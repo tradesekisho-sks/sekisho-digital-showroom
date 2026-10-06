@@ -54,12 +54,20 @@
    ======================================== */
 
 .company-section {
+  background: var(--bg);
+}
+
+.company-card {
   background: #BFCFBB;
+  border-radius: 24px;
+  padding: 48px 52px;
 }
 
 /* Two-column company area */
 .company-grid {
-  gap: 70px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(360px, 0.75fr);
+  gap: 64px;
+  align-items: stretch;
 }
 
 /* Smaller company title */
@@ -88,15 +96,16 @@
 
 /* Right showroom column */
 .showroom-card-side {
-  border-left: 1px solid rgba(52, 76, 61, 0.25);
-  padding-left: 54px;
+  border-left: 0;
+  padding-left: 0;
+  padding-top: 8px;
 }
 
 /* Each showroom row */
 .mini-showroom {
-  gap: 20px;
-  padding: 18px 0;
-  border-bottom: 1px solid rgba(52, 76, 61, 0.20);
+  gap: 18px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(52, 76, 61, 0.14);
 }
 
 /* Number circles */
@@ -116,7 +125,8 @@
 
 /* Different green for each circle */
 .mini-showroom:nth-child(2) span {
-  background: #edf1eb;
+  background: #BFCFBB;
+  color: #344C3D;
 }
 
 .mini-showroom:nth-child(3) span {
@@ -151,14 +161,29 @@
 
 /* Mobile */
 @media (max-width: 980px) {
+  .company-grid {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+
+  .company-card {
+    padding: 40px;
+    border-radius: 20px;
+  }
+
   .showroom-card-side {
     border-left: 0;
-    border-top: 1px solid rgba(52, 76, 61, 0.25);
-    padding: 32px 0 0;
+    border-top: 0;
+    padding: 0;
   }
 }
 
 @media (max-width: 640px) {
+  .company-card {
+    padding: 30px 24px;
+    border-radius: 16px;
+  }
+
   .company-card h2 {
     font-size: 27px;
   }
