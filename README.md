@@ -151,3 +151,11 @@ Ibaraki, Japan
 with real company contact information.
 
 Also replace `assets/images/logo-placeholder.svg` with the actual company logo when available.
+
+## UI redesign (2026-10)
+- Responsive Japan Street-inspired layout using the Sekisho sage palette.
+- Search area combines showroom, keyword and category filters.
+- `products.csv` now supports three product images: `image`, `image_2`, `image_3`.
+- `image` is the card/main image. `image_2` and `image_3` are optional; when present they appear as clickable thumbnails in the product detail view.
+- Example paths: `assets/images/product-main.jpg`, `assets/images/product-side.jpg`, `assets/images/product-detail.jpg`.
+- Existing product rows/data were retained; the two new image columns are blank until filled.

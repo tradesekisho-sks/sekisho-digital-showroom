@@ -241,7 +241,7 @@ contact_email_label: "メール：",
 contact_tel_label: "電話：",
 contact_address_label: "住所：",
 footer_text: "© 関彰商事株式会社｜ビジネストランスフォーメーション部 海外事業統括 貿易課",
-    search: "商品名で検索...", all_showrooms: "全ショールーム", all_categories: "全カテゴリー",
+    search: "商品名で検索...", search_button: "検索", category_filter_label: "カテゴリー", browse_all: "すべての商品を見る →", showroom_intro: "4つのショールームから商品をお探しいただけます。", clear_filters: "条件をクリア", all_showrooms: "全ショールーム", all_categories: "全カテゴリー",
     result: "件の商品", empty: "該当する商品がありません。", inquiry: "見積依頼",
 	  detail_product_id: "商品ID",
 detail_showroom: "ショールーム",
@@ -283,7 +283,7 @@ contact_email_label: "Email:",
 contact_tel_label: "Tel:",
 contact_address_label: "Address:",
 footer_text: "© Sekisho Corporation | Business Transformation Department | International Operations | Foreign Trade Section",
-    search: "Search products...", all_showrooms: "All Showrooms", all_categories: "All Categories",
+    search: "Search products...", search_button: "SEARCH", category_filter_label: "Category", browse_all: "Browse all products →", showroom_intro: "Explore products through our four showrooms.", clear_filters: "Clear filters", all_showrooms: "All Showrooms", all_categories: "All Categories",
     result: "products", empty: "No products found.", inquiry: "Request Quotation",
 	detail_product_id: "Product ID",
 detail_showroom: "Showroom",
@@ -325,7 +325,7 @@ contact_email_label: "Email:",
 contact_tel_label: "Điện thoại:",
 contact_address_label: "Địa chỉ:",
 footer_text: "© Công ty Sekisho | Khối Chuyển đổi Kinh doanh | Quản lý Kinh doanh Hải ngoại | Phòng Thương mại Quốc tế",
-    search: "Tìm kiếm sản phẩm...", all_showrooms: "Tất cả showroom", all_categories: "Tất cả danh mục",
+    search: "Tìm kiếm sản phẩm...", search_button: "TÌM KIẾM", category_filter_label: "Danh mục", browse_all: "Xem tất cả sản phẩm →", showroom_intro: "Khám phá sản phẩm qua 4 showroom của chúng tôi.", clear_filters: "Xóa bộ lọc", all_showrooms: "Tất cả showroom", all_categories: "Tất cả danh mục",
     result: "sản phẩm", empty: "Không tìm thấy sản phẩm phù hợp.", inquiry: "Yêu cầu báo giá",
 	  detail_product_id: "Mã sản phẩm",
 detail_showroom: "Showroom",
@@ -356,49 +356,52 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function setupEvents() {
   document.getElementById("menuButton").addEventListener("click", () => {
-    document.getElementById("mainNav").classList.toggle("show");
+    const nav = document.getElementById("mainNav");
+    nav.classList.toggle("show");
+    document.getElementById("menuButton").setAttribute("aria-expanded", nav.classList.contains("show"));
   });
 
   document.getElementById("languageSelect").addEventListener("change", (event) => {
-  currentLang = event.target.value;
-  applyLanguage();
-  buildShowroomCards();
-  buildShowroomFilter();
-  rebuildCategoryFilter();
-  renderAll();
-});
-
-  document.getElementById("globalSearch").addEventListener("input", (event) => {
-    document.getElementById("productSearch").value = event.target.value;
-    location.hash = "products";
+    currentLang = event.target.value;
+    applyLanguage();
+    buildShowroomCards();
+    buildShowroomFilter();
+    rebuildCategoryFilter();
     renderAll();
   });
 
   document.getElementById("productSearch").addEventListener("input", renderAll);
-
+  document.getElementById("productSearch").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") document.getElementById("products").scrollIntoView({ behavior: "smooth" });
+  });
+  document.getElementById("searchButton").addEventListener("click", () => {
+    renderAll();
+    document.getElementById("products").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
   document.getElementById("showroomFilter").addEventListener("change", (event) => {
     activeShowroom = event.target.value;
     rebuildCategoryFilter();
     renderAll();
   });
-
   document.getElementById("categoryFilter").addEventListener("change", renderAll);
+  document.getElementById("clearFilters").addEventListener("click", () => {
+    document.getElementById("productSearch").value = "";
+    document.getElementById("showroomFilter").value = "all";
+    activeShowroom = "all";
+    rebuildCategoryFilter();
+    document.getElementById("categoryFilter").value = "all";
+    renderAll();
+  });
 
   document.getElementById("downloadPdfBtn").addEventListener("click", (event) => {
     const showroom = document.getElementById("showroomFilter").value;
     const productWithPdf = products.find(p => (showroom === "all" || p.showroom === showroom) && p.pdf_link);
-    if (!productWithPdf) {
-      event.preventDefault();
-      alert("PDF catalog link can be added in products.csv.");
-    }
+    if (!productWithPdf) { event.preventDefault(); alert("PDF catalog link can be added in products.csv."); }
   });
-
   document.getElementById("modalClose").addEventListener("click", closeModal);
-  document.getElementById("productModal").addEventListener("click", (event) => {
-    if (event.target.id === "productModal") closeModal();
-  });
+  document.getElementById("productModal").addEventListener("click", (event) => { if (event.target.id === "productModal") closeModal(); });
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeModal(); });
 }
-
 async function loadProducts() {
   const response = await fetch("data/products.csv");
   const text = await response.text();
@@ -459,7 +462,6 @@ document.querySelectorAll("[data-i18n-html]").forEach(el => {
     }
 });
 
-  document.getElementById("globalSearch").placeholder = t.search;
   document.getElementById("productSearch").placeholder = t.search;
   document.querySelector("#showroomFilter option[value='all']").textContent = t.all_showrooms;
   document.querySelector("#categoryFilter option[value='all']").textContent = t.all_categories;
@@ -634,70 +636,79 @@ function description(p) {
   return p.description_en || p.description_ja;
 }
 
+function productImages(p) {
+  return [p.image, p.image_2, p.image_3].filter((value, index, array) => value && array.indexOf(value) === index);
+}
+
 function productCard(p) {
+  const image = productImages(p)[0] || "assets/images/placeholder-product.svg";
   return `
-    <article class="product-card" onclick="openProduct('${p.id}')">
+    <article class="product-card" onclick="openProduct('${p.id}')" tabindex="0" onkeydown="if(event.key==='Enter') openProduct('${p.id}')">
       <div class="product-image">
         ${p.badge ? `<span class="badge">${p.badge}</span>` : ""}
-        <img src="${p.image || "assets/images/placeholder-product.svg"}" alt="${productName(p)}">
+        <img src="${image}" alt="${productName(p)}" loading="lazy" onerror="this.src='assets/images/placeholder-product.svg'">
       </div>
       <div class="product-body">
         <h3>${productName(p)}</h3>
-        <p class="en">${p.name_en || ""}</p>
+        ${currentLang !== "en" && p.name_en ? `<p class="en">${p.name_en}</p>` : ""}
         <div class="product-meta">
           ${p.showroom ? `<span class="tag">${showroomName(p.showroom)}</span>` : ""}
           ${p.category ? `<span class="tag">${categoryName(p.category)}</span>` : ""}
         </div>
       </div>
-    </article>
-  `;
+    </article>`;
+}
+
+function setGalleryImage(src, button) {
+  const main = document.getElementById("galleryMainImage");
+  if (main) main.src = src;
+  document.querySelectorAll(".gallery-thumb").forEach(el => el.classList.remove("active"));
+  if (button) button.classList.add("active");
 }
 
 function openProduct(id) {
   const p = products.find(item => item.id === id);
   if (!p) return;
-
+  const images = productImages(p);
+  if (!images.length) images.push("assets/images/placeholder-product.svg");
   const specs = [
-  [translations[currentLang].detail_showroom, showroomName(p.showroom)],
-  [translations[currentLang].detail_category, categoryName(p.category)],
-  [translations[currentLang].detail_product_type, p.product_type],
-  [translations[currentLang].detail_net_weight_size, p.net_weight_or_size],
-  [translations[currentLang].detail_material, p.material],
-  [translations[currentLang].detail_shelf_life, p.shelf_life],
-  [translations[currentLang].detail_storage, storageName(p.storage)],
-  [translations[currentLang].detail_origin, originName(p.origin)],
-  [translations[currentLang].detail_maker_artisan, p.maker_or_artisan],
-  [translations[currentLang].detail_moq, p.moq],
-  [translations[currentLang].detail_price, p.price],
-  [translations[currentLang].detail_usage_scene, p.usage_scene],
-  [translations[currentLang].detail_allergy_notes, p.allergy_or_notes]
-].filter(row => row[1]);
+    [translations[currentLang].detail_product_id, p.id],
+    [translations[currentLang].detail_showroom, showroomName(p.showroom)],
+    [translations[currentLang].detail_category, categoryName(p.category)],
+    [translations[currentLang].detail_product_type, p.product_type],
+    [translations[currentLang].detail_net_weight_size, p.net_weight_or_size],
+    [translations[currentLang].detail_material, p.material],
+    [translations[currentLang].detail_shelf_life, p.shelf_life],
+    [translations[currentLang].detail_storage, storageName(p.storage)],
+    [translations[currentLang].detail_origin, originName(p.origin)],
+    [translations[currentLang].detail_maker_artisan, p.maker_or_artisan],
+    [translations[currentLang].detail_moq, p.moq],
+    [translations[currentLang].detail_price, p.price],
+    [translations[currentLang].detail_usage_scene, p.usage_scene],
+    [translations[currentLang].detail_allergy_notes, p.allergy_or_notes]
+  ].filter(row => row[1]);
 
   document.getElementById("modalContent").innerHTML = `
     <div class="modal-grid">
-      <div class="modal-image">
-        <img src="${p.image || "assets/images/placeholder-product.svg"}" alt="${productName(p)}">
+      <div class="product-gallery">
+        <div class="gallery-main"><img id="galleryMainImage" src="${images[0]}" alt="${productName(p)}" onerror="this.src='assets/images/placeholder-product.svg'"></div>
+        ${images.length > 1 ? `<div class="gallery-thumbs">${images.map((src,i)=>`<button class="gallery-thumb ${i===0?'active':''}" type="button" onclick="setGalleryImage('${src}', this)"><img src="${src}" alt="${productName(p)} ${i+1}"></button>`).join('')}</div>` : ''}
       </div>
-      <div>
-        <p class="eyebrow">${showroomName(p.showroom)}</p>
+      <div class="modal-info">
+        <p class="eyebrow">${showroomName(p.showroom)}${p.category ? ` / ${categoryName(p.category)}` : ""}</p>
         <h2>${productName(p)}</h2>
-        <p>${description(p) || ""}</p>
-
-        <table class="spec-table">
-          <tr><th>${translations[currentLang].detail_product_id}</th><td>${p.id}</td></tr>
-          ${specs.map(([key, value]) => `<tr><th>${key}</th><td>${value}</td></tr>`).join("")}
-        </table>
-
-        <a class="btn primary" href="mailto:trade@example.com?subject=Product Inquiry: ${encodeURIComponent(p.name_en || p.name_ja || p.id)}">
-          ${translations[currentLang].inquiry}
-        </a>
+        <p class="modal-description">${description(p) || ""}</p>
+        <dl class="spec-list">${specs.map(([key,value])=>`<div class="spec-row"><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl>
+        <div class="modal-actions">
+          <a class="primary-button" href="mailto:info-global@sekisho.co.jp?subject=Product Inquiry: ${encodeURIComponent(p.name_en || p.name_ja || p.id)}">${translations[currentLang].inquiry}</a>
+          ${p.pdf_link ? `<a class="outline-button" href="${p.pdf_link}" target="_blank" rel="noopener">${translations[currentLang].detail_pdf}</a>` : ""}
+        </div>
       </div>
-    </div>
-  `;
-
+    </div>`;
   document.getElementById("productModal").classList.add("show");
+  document.body.style.overflow = "hidden";
 }
-
 function closeModal() {
   document.getElementById("productModal").classList.remove("show");
+  document.body.style.overflow = "";
 }

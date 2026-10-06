@@ -3,80 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Digital Showroom</title>
+  <meta name="theme-color" content="#f5f5f2" />
+  <title>Sekisho Digital Showroom</title>
   <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a href="#home" class="brand">
+      <a href="#home" class="brand" aria-label="Sekisho Digital Showroom">
         <img src="assets/images/sekisho-logo.png" alt="Sekisho logo" />
-        <div>
-          <strong>関彰商事</strong>
-          <span>海外事業統括｜貿易課</span>
-        </div>
+        <div class="brand-copy"><strong>関彰商事</strong><span>Foreign Trade Section</span></div>
       </a>
-
-      <button class="menu-button" id="menuButton" aria-label="Menu">☰</button>
-
+      <button class="menu-button" id="menuButton" aria-label="Menu" aria-expanded="false">☰</button>
       <nav class="main-nav" id="mainNav">
         <a href="#home" data-i18n="nav_home">ホーム</a>
- 	<a href="#showrooms" data-i18n="nav_showrooms">ショールーム</a>
-	<a href="#company" data-i18n="nav_company">会社情報</a>
-	<a href="#contact" data-i18n="nav_contact">お問い合わせ</a>
+        <a href="#showrooms" data-i18n="nav_showrooms">ショールーム</a>
+        <a href="#company" data-i18n="nav_company">会社情報</a>
+        <a href="#contact" data-i18n="nav_contact">お問い合わせ</a>
       </nav>
-
-      <div class="header-tools">
-        <input id="globalSearch" type="search" placeholder="商品名で検索..." />
-        <select id="languageSelect">
-          <option value="ja">JP</option>
-          <option value="en">EN</option>
-          <option value="vi">VI</option>
-        </select>
-      </div>
+      <div class="header-tools"><select id="languageSelect" aria-label="Language"><option value="ja">JP</option><option value="en">EN</option><option value="vi">VI</option></select></div>
     </div>
   </header>
 
   <main>
     <section id="home" class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <h1 data-i18n="hero_title">日本の商品を、世界へ。</h1>
-          <p data-i18n="hero_text">
-            食品、伝統工芸品、ライフスタイル商品、設備・ソリューションなど、幅広い日本の商品をご紹介しています。
-          </p>
-          <div class="hero-actions">
-            <a href="#showrooms" class="btn primary" data-i18n="explore_showrooms">ショールームを見る</a>
-            <a href="#contact" class="btn ghost" data-i18n="request_quotation">見積依頼</a>
-          </div>
+      <div class="container hero-inner">
+        <p class="hero-kicker">SEKISHO DIGITAL SHOWROOM</p>
+        <h1 data-i18n="hero_title">日本の商品を、世界へ。</h1>
+        <p class="hero-text" data-i18n="hero_text">食品、伝統工芸品、ライフスタイル商品、設備・ソリューションなど、幅広い日本の商品をご紹介しています。</p>
+
+        <div class="catalog-search" role="search">
+          <select id="showroomFilter" aria-label="Showroom"><option value="all">全ショールーム</option></select>
+          <input id="productSearch" type="search" placeholder="商品名で検索..." />
+          <button id="searchButton" type="button"><span data-i18n="search_button">検索</span><span class="search-icon" aria-hidden="true"></span></button>
         </div>
-        <div class="hero-visual">
-          <div class="visual-card food" onclick="selectShowroom('Food & Beverage')">
-  Food
-</div>
-
-<div class="visual-card craft" onclick="selectShowroom('Traditional Crafts')">
-  Craft
-</div>
-
-<div class="visual-card life" onclick="selectShowroom('Japanese Lifestyle Goods')">
-  Lifestyle
-</div>
-
-<div class="visual-card device" onclick="selectShowroom('Equipment & Solutions')">
-  Equipment &<br>Solutions
-</div>
+        <div class="search-subrow">
+          <label for="categoryFilter" data-i18n="category_filter_label">カテゴリー</label>
+          <select id="categoryFilter"><option value="all">全カテゴリー</option></select>
+          <a href="#products" class="text-link" data-i18n="browse_all">すべての商品を見る →</a>
         </div>
       </div>
     </section>
 
-    <section id="showrooms" class="section">
+    <section id="showrooms" class="section showroom-section">
       <div class="container">
-        <div class="section-head">
-          <p class="eyebrow" data-i18n="showroom_eyebrow">Select Product Area</p>
-          <h2 data-i18n="showroom_title">Showrooms</h2>
-        </div>
+        <div class="section-title centered"><p class="eyebrow" data-i18n="showroom_eyebrow">Select Product Area</p><h2 data-i18n="showroom_title">Showrooms</h2><p data-i18n="showroom_intro">4つのショールームから商品をお探しいただけます。</p></div>
         <div id="showroomCards" class="showroom-grid"></div>
       </div>
     </section>
@@ -84,108 +56,27 @@
     <section id="products" class="section product-area">
       <div class="container">
         <div class="product-title-row">
-          <div>
-            <p class="eyebrow" id="currentShowroomLabel">All Showrooms</p>
-            <h2 id="currentShowroomTitle" data-i18n="all_products">All Products</h2>
-          </div>
-          <a id="downloadPdfBtn" class="btn small" href="#" data-i18n="download_pdf">Download PDF Catalog</a>
+          <div><p class="eyebrow" id="currentShowroomLabel">All Showrooms</p><h2 id="currentShowroomTitle" data-i18n="all_products">All Products</h2></div>
+          <a id="downloadPdfBtn" class="outline-button" href="#" data-i18n="download_pdf">PDFカタログ</a>
         </div>
-
-        <div id="recommendedBlock" class="recommended-block">
-          <div class="section-head compact">
-            <h3 data-i18n="recommended_products">Recommended Products</h3>
-          </div>
-          <div id="recommendedGrid" class="product-grid recommended"></div>
-        </div>
-
-        <div class="filter-panel">
-          <input id="productSearch" type="search" placeholder="商品名で検索..." />
-          <select id="showroomFilter">
-            <option value="all">全ショールーム</option>
-          </select>
-          <select id="categoryFilter">
-            <option value="all">全カテゴリー</option>
-          </select>
-        </div>
-
-        <p id="resultCount" class="result-count"></p>
+        <div id="recommendedBlock" class="recommended-block"><div class="subsection-title"><h3 data-i18n="recommended_products">Recommended Products</h3></div><div id="recommendedGrid" class="product-grid recommended"></div></div>
+        <div class="catalog-toolbar"><p id="resultCount" class="result-count"></p><button id="clearFilters" class="text-button" type="button" data-i18n="clear_filters">条件をクリア</button></div>
         <div id="productGrid" class="product-grid"></div>
       </div>
     </section>
 
     <section id="company" class="section company-section">
       <div class="container company-grid">
-        <article class="company-card">
-          <p class="eyebrow" data-i18n="company_eyebrow">Company Profile</p>
-        <h2 id="companyTitle" data-i18n-html="company_title">
-	関彰商事株式会社<br>
-	海外事業統括 貿易課
-	</h2>
-          <p data-i18n="company_text">
-            関彰商事株式会社 ビジネストランスフォーメーション部 海外事業統括 貿易課は、セキショウグループの貿易事業を担う部門です。 食品、伝統工芸品、ライフスタイル商品、設備ソリューションなど、日本の優れた商品を海外市場へご紹介しています。
-          </p>
-          <a class="btn ghost dark" href="https://www.sekisho.co.jp/" target="_blank" rel="noopener noreferrer" data-i18n="group_site">
-            セキショウグループ公式サイトを見る
-          </a>
-        </article>
-       
-<article class="showroom-card-side">
-  <p class="eyebrow">OUR SHOWROOMS</p>
-
-  <div class="mini-showroom" onclick="selectShowroom('Food & Beverage')">
-  <span class="mini-dot food-dot"></span>
-  <span data-i18n="mini_food">食品・飲料</span>
-</div>
-
-<div class="mini-showroom" onclick="selectShowroom('Traditional Crafts')">
-  <span class="mini-dot craft-dot"></span>
-  <span data-i18n="mini_craft">伝統工芸品</span>
-</div>
-
-<div class="mini-showroom" onclick="selectShowroom('Japanese Lifestyle Goods')">
-  <span class="mini-dot life-dot"></span>
-  <span data-i18n="mini_lifestyle">ライフスタイル商品</span>
-</div>
-
-<div class="mini-showroom" onclick="selectShowroom('Equipment & Solutions')">
-  <span class="mini-dot equipment-dot"></span>
-  <span data-i18n="mini_equipment">設備・ソリューション</span>
-</div>
-</article>
-
+        <article class="company-card"><p class="eyebrow" data-i18n="company_eyebrow">Company Profile</p><h2 id="companyTitle" data-i18n-html="company_title">関彰商事株式会社<br>海外事業統括 貿易課</h2><p data-i18n="company_text"></p><a class="outline-button" href="https://www.sekisho.co.jp/" target="_blank" rel="noopener noreferrer" data-i18n="group_site">セキショウグループ公式サイトを見る</a></article>
+        <article class="showroom-card-side"><p class="eyebrow">OUR SHOWROOMS</p><div class="mini-showroom" onclick="selectShowroom('Food & Beverage')"><span>01</span><b data-i18n="mini_food">食品・飲料</b></div><div class="mini-showroom" onclick="selectShowroom('Traditional Crafts')"><span>02</span><b data-i18n="mini_craft">伝統工芸品</b></div><div class="mini-showroom" onclick="selectShowroom('Japanese Lifestyle Goods')"><span>03</span><b data-i18n="mini_lifestyle">ライフスタイル商品</b></div><div class="mini-showroom" onclick="selectShowroom('Equipment & Solutions')"><span>04</span><b data-i18n="mini_equipment">設備・ソリューション</b></div></article>
       </div>
     </section>
 
-    <section id="contact" class="section">
-  <div class="container contact-card">
-    <div>
-      
-      <h2 data-i18n="contact_title">お問い合わせ</h2>
-      <p data-i18n="contact_text">
-        商品詳細、見積、商談、PDFカタログについては下記までお問い合わせください。
-      </p>
-    </div>
-
-    <div class="contact-info">
-      <p><strong data-i18n="contact_email_label">メール：</strong> info-global@sekisho.co.jp</p>
-      <p><strong data-i18n="contact_tel_label">電話：</strong> +81-29-886-5660</p>
-      <p><strong data-i18n="contact_address_label">所在地：</strong> 茨城県つくば市東新井12-2</p>
-    </div>
-  </div>
-</section>
+    <section id="contact" class="section contact-section"><div class="container contact-card"><div><p class="eyebrow">BUSINESS INQUIRY</p><h2 data-i18n="contact_title">お問い合わせ</h2><p data-i18n="contact_text"></p></div><div class="contact-info"><p><strong data-i18n="contact_email_label">メール：</strong> info-global@sekisho.co.jp</p><p><strong data-i18n="contact_tel_label">電話：</strong> +81-29-886-5660</p><p><strong data-i18n="contact_address_label">所在地：</strong> 茨城県つくば市東新井12-2</p></div></div></section>
   </main>
 
-  <div id="productModal" class="modal">
-    <div class="modal-card">
-      <button id="modalClose" class="modal-close">×</button>
-      <div id="modalContent"></div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container">© 関彰商事株式会社 | ビジネストランスフォーメーション部 | 海外事業統括 | 貿易課</div>
-  </footer>
-
-  <script src="script.js"></script>
+  <div id="productModal" class="modal" role="dialog" aria-modal="true" aria-label="Product details"><div class="modal-card"><button id="modalClose" class="modal-close" aria-label="Close">×</button><div id="modalContent"></div></div></div>
+  <footer class="footer"><div class="container">© 関彰商事株式会社 | ビジネストランスフォーメーション部 | 海外事業統括 | 貿易課</div></footer>
+  <script src="script.js?v=3"></script>
 </body>
 </html>
