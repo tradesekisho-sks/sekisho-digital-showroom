@@ -7,3 +7,18 @@
 @media(max-width:980px){.main-nav{display:none;position:absolute;top:84px;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);padding:20px 24px;flex-direction:column;gap:15px}.main-nav.show{display:flex}.menu-button{display:block;margin-left:auto}.header-tools{order:3}.showroom-grid,.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.company-grid{grid-template-columns:1fr;gap:45px}.showroom-card-side{border-left:0;border-top:1px solid var(--line);padding:28px 0 0}.modal-grid{grid-template-columns:1fr}.gallery-main{height:min(55vw,440px)}}
 @media(max-width:640px){.container{width:min(100% - 28px,var(--max))}.header-inner{height:68px;gap:10px}.brand img{width:38px;height:38px}.brand strong{font-size:17px}.brand span{font-size:9px}.main-nav{top:68px}.hero{padding:48px 0 42px}.hero h1{font-size:30px}.hero-text{font-size:13px;margin-bottom:25px}.catalog-search{grid-template-columns:1fr 92px;border:1px solid var(--ink)}.catalog-search select{grid-column:1/-1;border-right:0;border-bottom:1px solid var(--line);height:46px}.catalog-search input{height:50px;padding:0 13px}.catalog-search button{height:50px;font-size:12px}.search-subrow{align-items:flex-start;flex-wrap:wrap}.search-subrow .text-link{width:100%;margin-left:0}.section{padding:58px 0}.section-title.centered{margin-bottom:34px}.showroom-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 16px}.showroom-image{margin-bottom:13px}.showroom-body h3{font-size:14px}.showroom-body p{font-size:10px;line-height:1.55}.product-title-row{align-items:flex-start;flex-direction:column;margin-bottom:28px}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 12px}.product-image{height:43vw;max-height:210px}.product-body h3{font-size:13px}.product-body .en{font-size:10px}.tag{font-size:9px}.contact-card{grid-template-columns:1fr;gap:25px}.contact-info{padding:22px 0 0;border-left:0;border-top:1px solid rgba(255,255,255,.25)}.modal{padding:0;align-items:stretch}.modal-card{max-height:100vh;width:100%;padding:20px 16px 40px}.modal-grid{gap:28px}.gallery-main{height:75vw;max-height:360px}.gallery-thumbs{grid-template-columns:repeat(3,1fr)}.gallery-thumb{height:70px}.spec-row{grid-template-columns:120px 1fr;font-size:12px}.modal-info h2{font-size:24px}.modal-actions>*{width:100%}}
 @media(max-width:380px){.brand-copy span{display:none}.product-grid{grid-template-columns:1fr}.product-image{height:78vw}.showroom-body p{display:none}}
+@media(max-width:380px){...}
+
+/* Larger Sekisho logo */
+.brand img {
+  width: 82px;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 640px) {
+  .brand img {
+    width: 58px;
+    height: auto;
+  }
+}
