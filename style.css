@@ -344,8 +344,8 @@
 .floating-category-nav {
   position: fixed;
   left: 24px;
-  top: 50%;
-  transform: translateY(-50%) translateX(-15px);
+  top: 110px;
+  transform: translateX(-15px);
   z-index: 90;
 
   opacity: 0;
@@ -359,7 +359,7 @@
 .floating-category-nav.visible {
   opacity: 1;
   visibility: visible;
-  transform: translateY(-50%) translateX(0);
+  transform: translateX(0);
 }
 
 .floating-category-button {
