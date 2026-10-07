@@ -522,6 +522,84 @@ function rebuildCategoryFilter() {
     option.textContent = categoryName(category);
     categoryFilter.appendChild(option);
   });
+	  buildFloatingCategoryMenu();
+}
+
+function buildFloatingCategoryMenu() {
+  const menu = document.getElementById("floatingCategoryMenu");
+  if (!menu) return;
+
+  const selectedShowroom = document.getElementById("showroomFilter").value;
+
+  const categories = [...new Set(
+    products
+      .filter(p => selectedShowroom === "all" || p.showroom === selectedShowroom)
+      .map(p => p.category)
+      .filter(Boolean)
+  )].sort();
+
+  const allLabel = translations[currentLang].all_categories;
+
+  menu.innerHTML = `
+    <button type="button" class="floating-category-item" data-category="all">
+      ${allLabel}
+    </button>
+
+    ${categories.map(category => `
+      <button
+        type="button"
+        class="floating-category-item"
+        data-category="${category}"
+      >
+        ${categoryName(category)}
+      </button>
+    `).join("")}
+  `;
+
+  menu.querySelectorAll(".floating-category-item").forEach(button => {
+    button.addEventListener("click", () => {
+      const category = button.dataset.category;
+
+      document.getElementById("categoryFilter").value = category;
+
+      renderAll();
+
+      const target = category === "all"
+        ? document.getElementById("products")
+        : document.getElementById(`category-${categorySlug(category)}`);
+
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+
+      document.getElementById("floatingCategoryNav")?.classList.remove("open");
+      document.getElementById("floatingCategoryButton")?.setAttribute("aria-expanded", "false");
+    });
+  });
+
+  updateFloatingCategoryActive();
+}
+
+function categorySlug(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function updateFloatingCategoryActive() {
+  const selected = document.getElementById("categoryFilter")?.value || "all";
+
+  document.querySelectorAll(".floating-category-item").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.category === selected
+    );
+  });
 }
 
 function renderAll() {
@@ -573,14 +651,48 @@ function renderRecommended() {
 
 function renderProducts() {
   const result = filteredProducts();
-  document.getElementById("resultCount").textContent = `${result.length} ${translations[currentLang].result}`;
+
+  document.getElementById("resultCount").textContent =
+    `${result.length} ${translations[currentLang].result}`;
 
   const grid = document.getElementById("productGrid");
+
   if (!result.length) {
-    grid.innerHTML = `<div class="empty-message">${translations[currentLang].empty}</div>`;
+    grid.innerHTML =
+      `<div class="empty-message">${translations[currentLang].empty}</div>`;
+    updateFloatingCategoryActive();
     return;
   }
-  grid.innerHTML = result.map(productCard).join("");
+
+  const grouped = new Map();
+
+  result.forEach(product => {
+    const category = product.category || "Other";
+
+    if (!grouped.has(category)) {
+      grouped.set(category, []);
+    }
+
+    grouped.get(category).push(product);
+  });
+
+  grid.innerHTML = [...grouped.entries()].map(([category, items]) => `
+    <section
+      class="product-category-section"
+      id="category-${categorySlug(category)}"
+    >
+      <div class="product-category-heading">
+        <h3>${categoryName(category)}</h3>
+        <span class="product-category-line"></span>
+      </div>
+
+      <div class="product-grid category-product-grid">
+        ${items.map(productCard).join("")}
+      </div>
+    </section>
+  `).join("");
+
+  updateFloatingCategoryActive();
 }
 
 function updatePdfButton() {
