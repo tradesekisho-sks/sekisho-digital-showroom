@@ -580,38 +580,39 @@ function buildFloatingCategoryMenu() {
     `).join("")}
   `;
 
-  menu.querySelectorAll(".floating-category-item").forEach(button => {
+ menu.querySelectorAll(".floating-category-item").forEach(button => {
   button.addEventListener("click", () => {
     const category = button.dataset.category;
+    const categoryFilter = document.getElementById("categoryFilter");
 
-    // Close the floating menu
-    document.getElementById("floatingCategoryNav")?.classList.remove("open");
+    // Floating Category luôn ghi đè Category filter ở đầu trang
+    categoryFilter.value = category;
+
+    // Render lại catalog theo category vừa chọn
+    renderAll();
+
+    // Cập nhật trạng thái active của floating menu
+    updateFloatingCategoryActive();
+
+    // Đóng floating menu
+    document.getElementById("floatingCategoryNav")
+      ?.classList.remove("open");
+
     document.getElementById("floatingCategoryButton")
       ?.setAttribute("aria-expanded", "false");
 
-    // All Categories
-    if (category === "all") {
-      document.getElementById("categoryFilter").value = "all";
-      renderAll();
-
-      requestAnimationFrame(() => {
-        document.getElementById("productGrid")?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      });
-
-      return;
-    }
-
-    // Make sure all category sections are displayed
-    if (document.getElementById("categoryFilter").value !== "all") {
-      document.getElementById("categoryFilter").value = "all";
-      renderAll();
-    }
-
-    // Wait until category sections are rendered, then jump
+    // Sau khi render xong, đưa người dùng tới đúng phần sản phẩm
     requestAnimationFrame(() => {
+      if (category === "all") {
+        document.getElementById("productGrid")
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+
+        return;
+      }
+
       const target = document.getElementById(
         `category-${categorySlug(category)}`
       );
