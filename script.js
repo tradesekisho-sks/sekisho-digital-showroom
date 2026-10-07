@@ -240,7 +240,7 @@ contact_text: "商品詳細、見積、商談、PDFカタログについては�
 contact_email_label: "メール：",
 contact_tel_label: "電話：",
 contact_address_label: "住所：",
-footer_text: "© 関彰商事株式会社｜ビジネストランスフォーメーション部 海外事業統括 貿易課",
+footer_text: "© 関彰商事株式会社｜法人営業本部 広域営業部 海外事業統括 貿易課",
     search: "商品名で検索...", search_button: "検索", category_filter_label: "カテゴリー", browse_all: "すべての商品を見る →", showroom_intro: "4つのショールームから商品をお探しいただけます。", clear_filters: "条件をクリア", all_showrooms: "全ショールーム", all_categories: "全カテゴリー",
     result: "件の商品", empty: "該当する商品がありません。", inquiry: "見積依頼",
 	  detail_product_id: "商品ID",
@@ -282,7 +282,7 @@ contact_text: "Please contact us for product details, quotations, business meeti
 contact_email_label: "Email:",
 contact_tel_label: "Tel:",
 contact_address_label: "Address:",
-footer_text: "© Sekisho Corporation | Business Transformation Department | International Operations | Foreign Trade Section",
+footer_text: "© Sekisho Corporation | Corporate Sales Division | Cross-Regional Sales Department | International Operations | Foreign Trade Section",
     search: "Search products...", search_button: "SEARCH", category_filter_label: "Category", browse_all: "Browse all products →", showroom_intro: "Explore products through our four showrooms.", clear_filters: "Clear filters", all_showrooms: "All Showrooms", all_categories: "All Categories",
     result: "products", empty: "No products found.", inquiry: "Request Quotation",
 	detail_product_id: "Product ID",
@@ -414,6 +414,17 @@ function setupEvents() {
       floatingCategoryButton.setAttribute("aria-expanded", String(isOpen));
     });
   }
+
+	document.addEventListener("click", (event) => {
+  const nav = document.getElementById("floatingCategoryNav");
+  const button = document.getElementById("floatingCategoryButton");
+
+  if (nav && button && !nav.contains(event.target)) {
+    nav.classList.remove("open");
+    button.setAttribute("aria-expanded", "false");
+  }
+});
+	
 }
 async function loadProducts() {
   const response = await fetch("data/products.csv");
@@ -527,7 +538,7 @@ function rebuildCategoryFilter() {
     .filter(p => selectedShowroom === "all" || p.showroom === selectedShowroom)
     .map(p => p.category)
     .filter(Boolean)
-  )].sort();
+  )];
 
   categories.forEach(category => {
     const option = document.createElement("option");
@@ -549,7 +560,7 @@ function buildFloatingCategoryMenu() {
       .filter(p => selectedShowroom === "all" || p.showroom === selectedShowroom)
       .map(p => p.category)
       .filter(Boolean)
-  )].sort();
+  )];
 
   const allLabel = translations[currentLang].all_categories;
 
@@ -573,12 +584,34 @@ function buildFloatingCategoryMenu() {
   button.addEventListener("click", () => {
     const category = button.dataset.category;
 
+    // Close the floating menu
+    document.getElementById("floatingCategoryNav")?.classList.remove("open");
+    document.getElementById("floatingCategoryButton")
+      ?.setAttribute("aria-expanded", "false");
+
+    // All Categories
     if (category === "all") {
-      document.getElementById("products").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+      document.getElementById("categoryFilter").value = "all";
+      renderAll();
+
+      requestAnimationFrame(() => {
+        document.getElementById("productGrid")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
       });
-    } else {
+
+      return;
+    }
+
+    // Make sure all category sections are displayed
+    if (document.getElementById("categoryFilter").value !== "all") {
+      document.getElementById("categoryFilter").value = "all";
+      renderAll();
+    }
+
+    // Wait until category sections are rendered, then jump
+    requestAnimationFrame(() => {
       const target = document.getElementById(
         `category-${categorySlug(category)}`
       );
@@ -589,11 +622,7 @@ function buildFloatingCategoryMenu() {
           block: "start"
         });
       }
-    }
-
-    document.getElementById("floatingCategoryNav")?.classList.remove("open");
-    document.getElementById("floatingCategoryButton")
-      ?.setAttribute("aria-expanded", "false");
+    });
   });
 });
 
@@ -842,24 +871,38 @@ function closeModal() {
   document.body.style.overflow = "";
 }
 
-// Show floating category navigator only around the Products section
+// Show Category Navigator while the user is inside the Products area
 const productsSection = document.getElementById("products");
 const floatingCategoryNav = document.getElementById("floatingCategoryNav");
 
-if (productsSection && floatingCategoryNav) {
-  const categoryNavObserver = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        floatingCategoryNav.classList.toggle("visible", entry.isIntersecting);
-      });
-    },
-    {
-      threshold: 0.02
-    }
-  );
+function updateCategoryNavigatorVisibility() {
+  if (!productsSection || !floatingCategoryNav) return;
 
-  categoryNavObserver.observe(productsSection);
+  const rect = productsSection.getBoundingClientRect();
+  const header = document.querySelector(".site-header");
+  const headerHeight = header ? header.offsetHeight : 0;
+
+  const insideProducts =
+    rect.top <= headerHeight + 20 &&
+    rect.bottom > headerHeight + 80;
+
+  floatingCategoryNav.classList.toggle("visible", insideProducts);
+
+  if (!insideProducts) {
+    floatingCategoryNav.classList.remove("open");
+
+    document.getElementById("floatingCategoryButton")
+      ?.setAttribute("aria-expanded", "false");
+  }
 }
+
+window.addEventListener("scroll", updateCategoryNavigatorVisibility, {
+  passive: true
+});
+
+window.addEventListener("resize", updateCategoryNavigatorVisibility);
+
+updateCategoryNavigatorVisibility();
 
 // Back to top button
 const backToTopButton = document.getElementById("backToTop");
