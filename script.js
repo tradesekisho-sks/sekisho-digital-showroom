@@ -712,3 +712,23 @@ function closeModal() {
   document.getElementById("productModal").classList.remove("show");
   document.body.style.overflow = "";
 }
+
+// Back to top button
+const backToTopButton = document.getElementById("backToTop");
+
+if (backToTopButton) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 400) {
+      backToTopButton.classList.add("show");
+    } else {
+      backToTopButton.classList.remove("show");
+    }
+  });
+
+  backToTopButton.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+}
