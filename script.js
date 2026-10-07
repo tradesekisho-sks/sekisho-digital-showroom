@@ -570,16 +570,18 @@ function buildFloatingCategoryMenu() {
   `;
 
   menu.querySelectorAll(".floating-category-item").forEach(button => {
-    button.addEventListener("click", () => {
-      const category = button.dataset.category;
+  button.addEventListener("click", () => {
+    const category = button.dataset.category;
 
-      document.getElementById("categoryFilter").value = category;
-
-      renderAll();
-
-      const target = category === "all"
-        ? document.getElementById("products")
-        : document.getElementById(`category-${categorySlug(category)}`);
+    if (category === "all") {
+      document.getElementById("products").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    } else {
+      const target = document.getElementById(
+        `category-${categorySlug(category)}`
+      );
 
       if (target) {
         target.scrollIntoView({
@@ -587,11 +589,13 @@ function buildFloatingCategoryMenu() {
           block: "start"
         });
       }
+    }
 
-      document.getElementById("floatingCategoryNav")?.classList.remove("open");
-      document.getElementById("floatingCategoryButton")?.setAttribute("aria-expanded", "false");
-    });
+    document.getElementById("floatingCategoryNav")?.classList.remove("open");
+    document.getElementById("floatingCategoryButton")
+      ?.setAttribute("aria-expanded", "false");
   });
+});
 
   updateFloatingCategoryActive();
 }
