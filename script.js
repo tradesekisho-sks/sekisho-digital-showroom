@@ -383,7 +383,10 @@ function setupEvents() {
     rebuildCategoryFilter();
     renderAll();
   });
-  document.getElementById("categoryFilter").addEventListener("change", renderAll);
+  document.getElementById("categoryFilter").addEventListener("change", () => {
+  renderAll();
+  updateFloatingCategoryActive();
+});
   document.getElementById("clearFilters").addEventListener("click", () => {
     document.getElementById("productSearch").value = "";
     document.getElementById("showroomFilter").value = "all";
@@ -401,6 +404,16 @@ function setupEvents() {
   document.getElementById("modalClose").addEventListener("click", closeModal);
   document.getElementById("productModal").addEventListener("click", (event) => { if (event.target.id === "productModal") closeModal(); });
   document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeModal(); });
+
+	  const floatingCategoryButton = document.getElementById("floatingCategoryButton");
+  const floatingCategoryNav = document.getElementById("floatingCategoryNav");
+
+  if (floatingCategoryButton && floatingCategoryNav) {
+    floatingCategoryButton.addEventListener("click", () => {
+      const isOpen = floatingCategoryNav.classList.toggle("open");
+      floatingCategoryButton.setAttribute("aria-expanded", String(isOpen));
+    });
+  }
 }
 async function loadProducts() {
   const response = await fetch("data/products.csv");
@@ -823,6 +836,25 @@ function openProduct(id) {
 function closeModal() {
   document.getElementById("productModal").classList.remove("show");
   document.body.style.overflow = "";
+}
+
+// Show floating category navigator only around the Products section
+const productsSection = document.getElementById("products");
+const floatingCategoryNav = document.getElementById("floatingCategoryNav");
+
+if (productsSection && floatingCategoryNav) {
+  const categoryNavObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        floatingCategoryNav.classList.toggle("visible", entry.isIntersecting);
+      });
+    },
+    {
+      threshold: 0.02
+    }
+  );
+
+  categoryNavObserver.observe(productsSection);
 }
 
 // Back to top button
